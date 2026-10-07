@@ -5,7 +5,7 @@
     - campanha_politica.html (este arquivo)
     - logo.png (logo que fica no topo do título)
     - foto1.png (moldura para foto de perfil - circular)
-    - foto2.png (moldura para post do feed - retangular)
+    - foto2.png (moldura para post do feed - retangular 4:5)
 -->
 <head>
     <meta charset="UTF-8">
@@ -28,10 +28,11 @@
             min-height: 100vh;
             padding: 20px;
             color: #333;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -57,14 +58,14 @@
             align-items: start;
         }
 
-        /* Left Section */
         .left-section {
             color: white;
+            position: sticky;
+            top: 40px;
         }
 
         .left-section h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 72px;
+            font-size: 64px;
             font-weight: 900;
             line-height: 0.95;
             margin-bottom: 20px;
@@ -74,9 +75,8 @@
         }
 
         .left-section p {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            font-family: 'Montserrat', sans-serif;
             margin-bottom: 40px;
             line-height: 1.5;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -84,12 +84,11 @@
 
         .upload-button {
             display: inline-block;
-            padding: 20px 50px;
+            padding: 18px 40px;
             background: #FFED00;
             color: #000;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
-            font-family: 'Montserrat', sans-serif;
             border: none;
             border-radius: 50px;
             cursor: pointer;
@@ -113,131 +112,118 @@
             display: none;
         }
 
-        /* Right Section - Mockups */
+        .info-text {
+            color: white;
+            font-size: 14px;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
         .right-section {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 40px;
+            align-items: center;
         }
 
         .mockup-container {
             background: white;
             border-radius: 16px;
-            padding: 20px;
+            padding: 30px;
             box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
             text-align: center;
+            width: 100%;
+            max-width: 450px;
         }
 
         .mockup-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
-            font-family: 'Montserrat', sans-serif;
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* Profile Picture Mockup */
-        .profile-mockup {
+        /* Base para a área de edição */
+        .capture-area {
             position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 20px;
+            background: transparent;
+            margin: 0 auto 25px auto;
+            overflow: hidden; /* Mantém a imagem presa dentro da forma */
         }
 
-        .profile-circle {
+        /* Foto de Perfil: Círculo Perfeito */
+        .profile-area {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+        }
+
+        /* Post do Feed: Proporção 4:5 */
+        .feed-area {
+            width: 320px;
+            height: 400px; /* 320 * (5/4) = 400 */
+        }
+
+        .frame-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 6px solid #FF0000;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            pointer-events: none; /* ESSENCIAL: Permite clicar "através" da moldura para arrastar a foto */
+            z-index: 10;
         }
 
-        .profile-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .profile-frame-img { background-image: url('foto1.png'); }
+        .feed-frame-img { background-image: url('foto2.png'); }
 
-        .profile-overlay {
+        .draggable-img {
             position: absolute;
-            bottom: 0;
+            top: 0;
             left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-            font-weight: 700;
+            cursor: grab;
+            z-index: 5;
+            transform-origin: center;
+            display: none; /* Fica oculta até ter imagem */
         }
 
-        .profile-overlay img {
-            height: 25px;
-            margin-right: 5px;
+        .draggable-img:active {
+            cursor: grabbing;
         }
 
-        /* Feed Post Mockup */
-        .feed-mockup {
-            background: white;
-            border: 3px solid #FF0000;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 0 auto;
-            width: 100%;
-            max-width: 280px;
-        }
-
-        .feed-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .feed-footer {
-            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
-            color: white;
-            padding: 12px;
+        .placeholder-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #999;
+            font-size: 14px;
+            font-weight: 600;
             text-align: center;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .feed-footer img {
-            height: 20px;
-            margin-right: 5px;
-            vertical-align: middle;
-        }
-
-        /* Download Buttons */
-        .download-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
+            width: 80%;
+            z-index: 1;
+            pointer-events: none;
         }
 
         .download-btn {
             padding: 12px 28px;
             background: #FFED00;
             color: #000;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 900;
-            font-family: 'Montserrat', sans-serif;
             border: none;
             border-radius: 25px;
             cursor: pointer;
             text-transform: uppercase;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
-            letter-spacing: 0.5px;
+            width: 100%;
+            display: none; /* Fica oculto até ter imagem */
         }
 
         .download-btn:hover {
@@ -246,135 +232,35 @@
             background: #FFE600;
         }
 
-        .download-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Placeholder State */
-        .placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f5f5f5;
-            color: #999;
-            font-size: 14px;
-            border-radius: 8px;
-            min-height: 200px;
-        }
-
-        .placeholder-feed {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 280px;
-            gap: 10px;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .left-section h1 {
-                font-size: 44px;
-            }
-
-            .left-section p {
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-
-            .left-section h1 {
-                font-size: 36px;
-            }
-
-            .left-section p {
-                font-size: 16px;
-            }
-
-            .upload-button {
-                padding: 16px 40px;
-                font-size: 18px;
-            }
-
-            .profile-mockup {
-                width: 160px;
-                height: 160px;
-            }
-
-            .feed-mockup {
-                max-width: 240px;
-            }
-
-            .feed-image {
-                height: 160px;
-            }
-        }
-
-        /* Loading State */
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .info-text {
-            color: white;
-            font-size: 14px;
-            margin-top: 20px;
-            text-align: center;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .hidden {
+        .controls-hint {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
             display: none;
         }
 
-        /* Molduras */
-        .profile-circle {
-            position: relative;
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            .left-section {
+                position: relative;
+                top: 0;
+                text-align: center;
+            }
+            .left-section h1 { font-size: 44px; }
         }
 
-        .profile-frame {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('foto1.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            pointer-events: none;
-            z-index: 2;
-            border-radius: 50%;
-        }
-
-        .feed-mockup {
-            position: relative;
-        }
-
-        .feed-frame {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: calc(100% - 6px);
-            height: calc(100% - 60px);
-            background-image: url('foto2.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            pointer-events: none;
-            z-index: 5;
+        @media (max-width: 768px) {
+            .left-section h1 { font-size: 36px; }
+            .profile-area {
+                width: 250px;
+                height: 250px;
+            }
+            .feed-area {
+                width: 280px;
+                height: 350px;
+            }
         }
     </style>
 </head>
@@ -387,57 +273,51 @@
 
         <!-- Main Content -->
         <div class="content">
-            <!-- Left Section -->
             <div class="left-section">
-                <h1>Coloque a<br>Campanha<br>na Sua Foto<br>de Perfil</h1>
-                <p>Escolha uma foto, ajuste dentro do círculo e baixe pronta para postar.</p>
+                <h1>Coloque a<br>Campanha<br>na Sua Foto</h1>
+                <p>Escolha uma foto, ajuste dentro da moldura (arrastando ou dando zoom) e baixe pronta para postar.</p>
                 <button class="upload-button" onclick="document.getElementById('imageInput').click()">
                     Escolha sua foto
                 </button>
                 <div class="info-text">
-                    💡 Para melhores resultados, use fotos que enquadrem bem o seu rosto no círculo.
+                    💡 Dica: Arraste com o dedo ou mouse. Use a roda do mouse (ou movimento de pinça) para ajustar o zoom da sua foto dentro da moldura!
                 </div>
             </div>
 
-            <!-- Right Section -->
             <div class="right-section">
-                <!-- Profile Picture -->
+                
+                <!-- Profile Picture (1:1 Circle) -->
                 <div class="mockup-container">
-                    <div class="mockup-title">Foto de Perfil</div>
-                    <div class="profile-mockup">
-                        <div class="profile-circle">
-                            <div id="profileImageContainer" class="placeholder">
-                                Clique para enviar uma foto
-                            </div>
-                            <div class="profile-frame"></div>
-                        </div>
-                        <div class="profile-overlay">
-                            <span>#eu voto 13</span>
-                        </div>
+                    <div class="mockup-title">Foto de Perfil (Círculo)</div>
+                    <p class="controls-hint" id="profileHint">Arraste para ajustar o enquadramento</p>
+                    
+                    <div class="capture-area profile-area" id="profileCapture">
+                        <span class="placeholder-text" id="profilePlaceholder">Nenhuma foto selecionada</span>
+                        <img id="profileUserImage" class="draggable-img" src="" alt="Sua foto">
+                        <div class="frame-overlay profile-frame-img"></div>
                     </div>
-                    <button class="download-btn" onclick="downloadProfile()" id="downloadProfileBtn" style="display: none;">
-                        ⬇ Baixar sua foto
+
+                    <button class="download-btn" onclick="downloadImage('profileCapture', 'foto_perfil')" id="downloadProfileBtn">
+                        ⬇ Baixar Perfil
                     </button>
                 </div>
 
-                <!-- Feed Post -->
+                <!-- Feed Post (4:5) -->
                 <div class="mockup-container">
-                    <div class="mockup-title">Post para o feed</div>
-                    <div class="feed-mockup">
-                        <div id="feedImageContainer" class="placeholder placeholder-feed">
-                            <span>Clique para enviar uma foto</span>
-                        </div>
-                        <div class="feed-frame"></div>
-                        <div class="feed-footer">
-                            #eu voto na campanha
-                        </div>
+                    <div class="mockup-title">Post para o feed (4:5)</div>
+                    <p class="controls-hint" id="feedHint">Arraste para ajustar o enquadramento</p>
+                    
+                    <div class="capture-area feed-area" id="feedCapture">
+                        <span class="placeholder-text" id="feedPlaceholder">Nenhuma foto selecionada</span>
+                        <img id="feedUserImage" class="draggable-img" src="" alt="Sua foto">
+                        <div class="frame-overlay feed-frame-img"></div>
                     </div>
-                    <div style="margin-top: 15px;">
-                        <button class="download-btn" onclick="downloadFeed()" id="downloadFeedBtn" style="display: none;">
-                            ⬇ Baixar sua foto
-                        </button>
-                    </div>
+
+                    <button class="download-btn" onclick="downloadImage('feedCapture', 'foto_feed')" id="downloadFeedBtn">
+                        ⬇ Baixar Feed
+                    </button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -446,78 +326,165 @@
     <input type="file" id="imageInput" accept="image/*">
 
     <script>
-        let uploadedImage = null;
+        let uploadedImageSrc = null;
 
-        // Image Upload Handler
+        const profileImg = document.getElementById('profileUserImage');
+        const feedImg = document.getElementById('feedUserImage');
+
+        // Lida com o Upload
         document.getElementById('imageInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    uploadedImage = event.target.result;
+                    uploadedImageSrc = event.target.result;
                     displayImages();
                 };
                 reader.readAsDataURL(file);
             }
+            // Reseta o input para permitir enviar a mesma imagem se o usuário deletar/mudar de ideia
+            this.value = ''; 
         });
 
+        // Exibe as imagens nas molduras
         function displayImages() {
-            if (!uploadedImage) return;
+            if (!uploadedImageSrc) return;
 
-            // Profile Image
-            const profileContainer = document.getElementById('profileImageContainer');
-            profileContainer.innerHTML = `<img src="${uploadedImage}" class="profile-image" alt="Foto de Perfil">`;
+            // Mostra UI de arrastar e baixar
+            document.getElementById('profilePlaceholder').style.display = 'none';
+            document.getElementById('feedPlaceholder').style.display = 'none';
+            document.getElementById('profileHint').style.display = 'block';
+            document.getElementById('feedHint').style.display = 'block';
             document.getElementById('downloadProfileBtn').style.display = 'block';
-
-            // Feed Image
-            const feedContainer = document.getElementById('feedImageContainer');
-            feedContainer.innerHTML = `<img src="${uploadedImage}" class="feed-image" alt="Foto do Feed">`;
             document.getElementById('downloadFeedBtn').style.display = 'block';
+
+            // Configura imagem no perfil
+            profileImg.src = uploadedImageSrc;
+            profileImg.style.display = 'block';
+            profileImg.onload = () => fitAndCenterImage(profileImg, profileImg.parentElement);
+
+            // Configura imagem no feed
+            feedImg.src = uploadedImageSrc;
+            feedImg.style.display = 'block';
+            feedImg.onload = () => fitAndCenterImage(feedImg, feedImg.parentElement);
         }
 
-        function downloadProfile() {
-            const element = document.querySelector('.mockup-container');
-            const profileSection = element.cloneNode(true);
-            profileSection.querySelector('.download-btn')?.remove();
-            profileSection.style.background = '#FF0000';
+        function fitAndCenterImage(img, container) {
+            const imgRatio = img.naturalWidth / img.naturalHeight;
+            const containerRatio = container.clientWidth / container.clientHeight;
 
-            html2canvas(profileSection, {
-                backgroundColor: '#FF0000',
-                scale: 2,
+            // Faz a imagem cobrir todo o container (como o object-fit: cover faria)
+            if (imgRatio > containerRatio) {
+                img.style.height = '100%';
+                img.style.width = 'auto';
+            } else {
+                img.style.width = '100%';
+                img.style.height = 'auto';
+            }
+
+            // Inicializa variaveis de posição e escala no dataset
+            img.dataset.x = 0;
+            img.dataset.y = 0;
+            img.dataset.scale = 1;
+            updateTransform(img);
+        }
+
+        function updateTransform(img) {
+            const x = img.dataset.x || 0;
+            const y = img.dataset.y || 0;
+            const scale = img.dataset.scale || 1;
+            img.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+        }
+
+        function setupDraggable(imgElement) {
+            let isDragging = false;
+            let startX, startY;
+
+            // Mouse Events
+            imgElement.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            // Touch Events
+            imgElement.addEventListener('touchstart', dragStart, { passive: false });
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('touchend', dragEnd);
+
+            // Zoom com a roda do mouse
+            imgElement.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                let scale = parseFloat(imgElement.dataset.scale || 1);
+                // Ajusta a velocidade do zoom
+                scale += e.deltaY * -0.001; 
+                // Limita o zoom min/max
+                scale = Math.min(Math.max(0.3, scale), 4); 
+                imgElement.dataset.scale = scale;
+                updateTransform(imgElement);
+            }, { passive: false });
+
+            function dragStart(e) {
+                e.preventDefault();
+                isDragging = true;
+                const evt = e.type.includes('touch') ? e.touches[0] : e;
+                
+                const currentX = parseFloat(imgElement.dataset.x || 0);
+                const currentY = parseFloat(imgElement.dataset.y || 0);
+                
+                startX = evt.clientX - currentX;
+                startY = evt.clientY - currentY;
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                const evt = e.type.includes('touch') ? e.touches[0] : e;
+                
+                imgElement.dataset.x = evt.clientX - startX;
+                imgElement.dataset.y = evt.clientY - startY;
+                
+                updateTransform(imgElement);
+            }
+
+            function dragEnd() {
+                isDragging = false;
+            }
+        }
+
+        // Inicializa o arrasto para ambas as imagens
+        setupDraggable(profileImg);
+        setupDraggable(feedImg);
+
+        function downloadImage(captureAreaId, prefixName) {
+            const captureArea = document.getElementById(captureAreaId);
+            
+            // Avisa visualmente que está processando
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ Gerando...';
+            btn.disabled = true;
+
+            // Utilizamos o html2canvas apontando direto para a area com overflow: hidden.
+            html2canvas(captureArea, {
+                backgroundColor: null, // Para manter transparência nas bordas arredondadas do perfil
+                scale: 3, // Alta resolução
+                useCORS: true,
                 logging: false
             }).then(canvas => {
                 const link = document.createElement('a');
                 link.href = canvas.toDataURL('image/png');
-                link.download = `foto-perfil-campanha-${new Date().getTime()}.png`;
+                link.download = `${prefixName}_campanha_${new Date().getTime()}.png`;
                 link.click();
+
+                // Restaura botão
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error("Erro ao gerar imagem:", err);
+                alert("Ocorreu um erro ao gerar a imagem.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             });
         }
-
-        function downloadFeed() {
-            const mockups = document.querySelectorAll('.mockup-container');
-            const feedSection = mockups[1].cloneNode(true);
-            feedSection.querySelector('.download-btn')?.remove();
-
-            html2canvas(feedSection, {
-                backgroundColor: '#FFFFFF',
-                scale: 2,
-                logging: false
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
-                link.download = `post-feed-campanha-${new Date().getTime()}.png`;
-                link.click();
-            });
-        }
-
-        // Click on mockups to upload image
-        document.querySelector('.profile-mockup').addEventListener('click', function() {
-            document.getElementById('imageInput').click();
-        });
-
-        document.querySelector('.feed-mockup').addEventListener('click', function() {
-            document.getElementById('imageInput').click();
-        });
     </script>
 </body>
 </html>
