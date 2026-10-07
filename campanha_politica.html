@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--
+    ARQUIVOS NECESSÁRIOS (coloque na mesma pasta):
+    - campanha_politica.html (este arquivo)
+    - logo.png (logo que fica no topo do título)
+    - foto1.png (moldura para foto de perfil - circular)
+    - foto2.png (moldura para post do feed - retangular)
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coloque a Campanha na Sua Foto de Perfil</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #CC0000 0%, #FF0000 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+            margin: 0 auto 30px;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Left Section */
+        .left-section {
+            color: white;
+        }
+
+        .left-section h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 0.95;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .left-section p {
+            font-size: 20px;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 40px;
+            line-height: 1.5;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-button {
+            display: inline-block;
+            padding: 20px 50px;
+            background: #FFED00;
+            color: #000;
+            font-size: 24px;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .upload-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            background: #FFE600;
+        }
+
+        .upload-button:active {
+            transform: translateY(-2px);
+        }
+
+        #imageInput {
+            display: none;
+        }
+
+        /* Right Section - Mockups */
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .mockup-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+
+        .mockup-title {
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Profile Picture Mockup */
+        .profile-mockup {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 6px solid #FF0000;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .profile-overlay img {
+            height: 25px;
+            margin-right: 5px;
+        }
+
+        /* Feed Post Mockup */
+        .feed-mockup {
+            background: white;
+            border: 3px solid #FF0000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .feed-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .feed-footer {
+            background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .feed-footer img {
+            height: 20px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        /* Download Buttons */
+        .download-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            padding: 12px 28px;
+            background: #FFED00;
+            color: #000;
+            font-size: 14px;
+            font-weight: 900;
+            font-family: 'Montserrat', sans-serif;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: #FFE600;
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Placeholder State */
+        .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            color: #999;
+            font-size: 14px;
+            border-radius: 8px;
+            min-height: 200px;
+        }
+
+        .placeholder-feed {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            gap: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .left-section h1 {
+                font-size: 44px;
+            }
+
+            .left-section p {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .left-section h1 {
+                font-size: 36px;
+            }
+
+            .left-section p {
+                font-size: 16px;
+            }
+
+            .upload-button {
+                padding: 16px 40px;
+                font-size: 18px;
+            }
+
+            .profile-mockup {
+                width: 160px;
+                height: 160px;
+            }
+
+            .feed-mockup {
+                max-width: 240px;
+            }
+
+            .feed-image {
+                height: 160px;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .info-text {
+            color: white;
+            font-size: 14px;
+            margin-top: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Molduras */
+        .profile-circle {
+            position: relative;
+        }
+
+        .profile-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('foto1.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+            z-index: 2;
+            border-radius: 50%;
+        }
+
+        .feed-mockup {
+            position: relative;
+        }
+
+        .feed-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: calc(100% - 6px);
+            height: calc(100% - 60px);
+            background-image: url('foto2.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="logo.png" alt="Logo da Campanha" class="logo">
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Left Section -->
+            <div class="left-section">
+                <h1>Coloque a<br>Campanha<br>na Sua Foto<br>de Perfil</h1>
+                <p>Escolha uma foto, ajuste dentro do círculo e baixe pronta para postar.</p>
+                <button class="upload-button" onclick="document.getElementById('imageInput').click()">
+                    Escolha sua foto
+                </button>
+                <div class="info-text">
+                    💡 Para melhores resultados, use fotos que enquadrem bem o seu rosto no círculo.
+                </div>
+            </div>
+
+            <!-- Right Section -->
+            <div class="right-section">
+                <!-- Profile Picture -->
+                <div class="mockup-container">
+                    <div class="mockup-title">Foto de Perfil</div>
+                    <div class="profile-mockup">
+                        <div class="profile-circle">
+                            <div id="profileImageContainer" class="placeholder">
+                                Clique para enviar uma foto
+                            </div>
+                            <div class="profile-frame"></div>
+                        </div>
+                        <div class="profile-overlay">
+                            <span>#eu voto 13</span>
+                        </div>
+                    </div>
+                    <button class="download-btn" onclick="downloadProfile()" id="downloadProfileBtn" style="display: none;">
+                        ⬇ Baixar sua foto
+                    </button>
+                </div>
+
+                <!-- Feed Post -->
+                <div class="mockup-container">
+                    <div class="mockup-title">Post para o feed</div>
+                    <div class="feed-mockup">
+                        <div id="feedImageContainer" class="placeholder placeholder-feed">
+                            <span>Clique para enviar uma foto</span>
+                        </div>
+                        <div class="feed-frame"></div>
+                        <div class="feed-footer">
+                            #eu voto na campanha
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <button class="download-btn" onclick="downloadFeed()" id="downloadFeedBtn" style="display: none;">
+                            ⬇ Baixar sua foto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Input -->
+    <input type="file" id="imageInput" accept="image/*">
+
+    <script>
+        let uploadedImage = null;
+
+        // Image Upload Handler
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    uploadedImage = event.target.result;
+                    displayImages();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function displayImages() {
+            if (!uploadedImage) return;
+
+            // Profile Image
+            const profileContainer = document.getElementById('profileImageContainer');
+            profileContainer.innerHTML = `<img src="${uploadedImage}" class="profile-image" alt="Foto de Perfil">`;
+            document.getElementById('downloadProfileBtn').style.display = 'block';
+
+            // Feed Image
+            const feedContainer = document.getElementById('feedImageContainer');
+            feedContainer.innerHTML = `<img src="${uploadedImage}" class="feed-image" alt="Foto do Feed">`;
+            document.getElementById('downloadFeedBtn').style.display = 'block';
+        }
+
+        function downloadProfile() {
+            const element = document.querySelector('.mockup-container');
+            const profileSection = element.cloneNode(true);
+            profileSection.querySelector('.download-btn')?.remove();
+            profileSection.style.background = '#FF0000';
+
+            html2canvas(profileSection, {
+                backgroundColor: '#FF0000',
+                scale: 2,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `foto-perfil-campanha-${new Date().getTime()}.png`;
+                link.click();
+            });
+        }
+
+        function downloadFeed() {
+            const mockups = document.querySelectorAll('.mockup-container');
+            const feedSection = mockups[1].cloneNode(true);
+            feedSection.querySelector('.download-btn')?.remove();
+
+            html2canvas(feedSection, {
+                backgroundColor: '#FFFFFF',
+                scale: 2,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `post-feed-campanha-${new Date().getTime()}.png`;
+                link.click();
+            });
+        }
+
+        // Click on mockups to upload image
+        document.querySelector('.profile-mockup').addEventListener('click', function() {
+            document.getElementById('imageInput').click();
+        });
+
+        document.querySelector('.feed-mockup').addEventListener('click', function() {
+            document.getElementById('imageInput').click();
+        });
+    </script>
+</body>
+</html>
